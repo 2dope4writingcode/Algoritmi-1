@@ -1,0 +1,130 @@
+\documentclass[a4paper, 12pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+
+\usepackage[protrusion=true,expansion=true]{microtype} % Better typography
+\usepackage{graphicx} % Required for including pictures
+\usepackage{wrapfig} % Allows in-line images
+\usepackage{enumitem} %%Enables control over enumerate and itemize environments
+\usepackage{setspace}
+\usepackage{amssymb, amsmath, mathrsfs} %%Math packages
+\usepackage{stmaryrd}
+\usepackage{mathtools}
+\usepackage{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Required for accented characters
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{bibentry}
+\usepackage[round]{natbib} %%Or change 'round' to 'square' for square backers
+\setcitestyle{aysep={}}
+
+\linespread{1.05} % Change line spacing here, Palatino benefits from a slight increase by default
+
+\newcommand{\corner}[1]{\ulcorner#1\urcorner} %%Corner quotes
+\newcommand{\tuple}[1]{\langle#1\rangle} %%Angle brackets
+\newcommand{\set}[1]{\lbrace#1\rbrace} %%Set brackets
+\newcommand{\interpret}[1]{\llbracket#1\rrbracket} %%Double brackets
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}    
+
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}} % Change the square brackets for each bibliography item from '[1]' to '1.'
+\renewcommand{\@listI}{\itemsep=0pt} % Reduce the space between items in the itemize and enumerate environments and the bibliography
+
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{flushright} % Right align
+{\LARGE\@title} % Increase the font size of the title
+
+\vspace{10pt} % Some vertical space between the title and author name
+
+{\@author} % Author name
+\\\@date % Date
+
+\vspace{30pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+
+\title{\textbf{Equazioni di Ricorrenza}} % Subtitle
+
+\author{\textsc{Algoritmi 1}\\ \em David Dragomir} % Institution
+
+\date{\today} % Date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+\thispagestyle{empty}
+
+%----------------------------------------------------------------------------------------
+
+\section*{Metodo Iterativo}
+
+Si "srotola" la ricorsione, ottenendo una sommatoria dipendente dalla
+sola dimensione di $n$. \\
+
+Considerando la seguente equazione di ricorrenza:
+
+$$
+T(n) = \begin{cases}
+  \theta(1) & \text{se $n=0$} \\
+  T(\frac{n}{2}) + \theta(1) & \text{se $n \geq 1$}
+\end{cases}
+$$
+
+si avrà:
+
+\begin{gather*}
+T(n) = T(\frac{n}{2}) + \theta(1) = T(\frac{n}{4}) + \theta(1) + \theta(1) = 
+T(\frac{n}{8}) + \theta(1) + \theta(1) + \theta(1) \\
+= T(\frac{n}{2^{3}}) + 3 \cdot \theta(1)
+\end{gather*}
+
+ci fermiamo quando $\frac{n}{2^{i}} = 1$, dunque:
+
+\begin{gather*}
+n = 2^{i} \Rightarrow i = log_{2} n \\
+  \Rightarrow log_{2}n \cdot \theta(1) + T(1) \Rightarrow log_{2}n
+  \cdot \theta(1) + \theta(1) \simeq \theta(log_{2} n)
+\end{gather*}
+
+Altro esempio:
+$$
+T(n) = \begin{cases}
+  n + T(\frac{n}{2}) & \text{se $n > 1$} \\
+  1 & \text{se $n = 1$} 
+\end{cases}
+$$
+
+Sviluppando il termine $n + T(\frac{n}{2})$:
+
+\begin{gather*}
+  T(n) = n + T(\frac{n}{2}) = n + \frac{n}{2} + T(\frac{n}{4}) =
+  n + \frac{n}{2} + \frac{n}{4} + T(\frac{n}{8}) \\
+  = \frac{n}{2^{0}} + \frac{n}{2^{1}} + \frac{n}{2^{2}} + T(\frac{n}{2^{3}}) = \sum_{i = 0}^{k - 1} \frac{n}{2^{i}} + T(\frac{n}{2^k})
+\end{gather*}
+
+dunque ci fermeremo quando $\frac{n}{2^k} = 1$:
+
+$$
+n = 2^{k} \Rightarrow k = log_{2} n  \\
+$$
+
+la sommatoria quindi diventerà:
+\begin{gather*}
+  \sum_{i = 0}^{log_{2}n - 1} \frac{n}{2^i} + T(1) \\
+  \text{conoscendo la sommatoria notevole: $\sum_{i = 0}^{n} \alpha^{i} = \frac{1-\alpha^{n+1}}{1 - \alpha}$} \\
+  \Downarrow \\
+  n \sum_{i = 0}^{log_{2}n-1} (\frac{1}{2})^{i} + T(1) \Rightarrow n \cdot \frac{1 - (\frac{1}{2})^{log_{2}n}}{1 - (\frac{1}{2})} + 1 \\
+  = 2n \cdot (1 - \frac{1}{2^{log_{2}n}}) + 1 = 2n \cdot (1 - \frac{1}{n}) + 1 = 2n \cdot (\frac{n - 1}{n}) + 1 \\
+  = 2n - 2 + 1 = 2n - 1 = \theta(n)
+\end{gather*} 
+
+\vfill
+
+\bibliographystyle{Phil_Review} %%bib style found in bst folder, in bibtex folder, in texmf folder.
+\bibliography{Zotero} %%bib database found in bib folder, in bibtex folder
+\end{document}
