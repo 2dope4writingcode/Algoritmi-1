@@ -124,6 +124,88 @@ la sommatoria quindi diventerà:
   = 2n - 2 + 1 = 2n - 1 = \theta(n)
 \end{gather*} 
 
+\section*{Metodo di Sostituzione}
+
+Questo metodo ha come idea quella di "intuire" la soluzione di una
+relazione di ricorrenza ed usare l'induzione matematica per dimostrare
+che la soluzione è effettivamente quella intuita. \\
+
+Considerando la seguente equazione di ricorrenza:
+
+$$
+T(n) = \begin{cases}
+  \theta(1) & \text{se $n=1$} \\
+  \theta(1) + T(n-1) & \text{se $n > 1$}
+\end{cases}
+$$
+
+Se sostituiamo la costante $\theta(1)$ con d nella prima equazione e con
+c nella seconda avremo il seguente sistema:
+
+$$
+T(n) = \begin{cases}
+  d & \text{se $n=1$} \\
+  c + T(n-1) & \text{se $n > 1$}
+\end{cases}
+$$
+
+Dobbiamo dimostrare l'ipotesi che $T(n) = \theta(n)$:
+
+\begin{gather*}
+  T(n) \leq kn \\
+  \text{Vero $\forall n$}
+\end{gather*}
+
+Applicando l'induzione matematica si può arrivare tramite varie sostituzione alla conferma dell'ipotesi iniziale: \\
+
+Caso base: $n = 1$ 
+
+\begin{gather*}
+  T(1) \leq k \Rightarrow d \leq k \\
+  \text{Vero $\forall k \geq d$}
+\end{gather*}
+
+Ipotesi induttiva: $T(n-1) \leq k(n-1)$ 
+
+\begin{gather*}
+  T(n) \leq kn \\
+  T(n) = T(n-1) + c \\
+  \text{Ma sappiamo per ipotesi induttiva che $T(n-1) \leq k(n-1)$,\; dunque:} \\
+  T(n) = T(n-1) + c \leq k(n-1) +c = kn - k + c \\
+  = kn - (k - c) \leq kn = k - c \geq 0 \iff k \geq c
+\end{gather*}
+
+E dunque abbiamo confermato l'ipotesi iniziale in quanto $T(n) = \theta(n)$ perchè $T(n) \leq kn$, $\forall k \geq c$ e $\forall k \geq d$. \\
+
+Altro esempio:
+
+$$
+T(n) = \begin{cases}
+  n + T(\frac{n}{2}) & \text{se $n > 1$} \\
+  1 & \text{se $n=1$}
+\end{cases}
+$$
+
+Ipotesi: $T(n) = \theta(n) \Rightarrow T(n) \leq cn$: \\
+
+Caso base: $n = 1$
+
+\begin{gather*}
+  \T(1) \leq c \Rightarrow 1 \leq c \\
+  \text{Vero $\forall c \geq 1$}
+\end{gather*}
+
+
+Ipotesi induttiva: $T(n') \leq cn'$
+
+\begin{gather*}
+  T(n) \leq cn \\
+  T(n) = n + T(\frac{n}{2}) \leq n + c(\frac{n}{2}) \\
+  = n(1+\frac{c}{2}) \leq cn \iff 1 + \frac{c}{2} \leq c \\
+  = \frac{2+c}{2} \leq c \Rightarrow 2 + c \leq 2c \\
+  = c \leq 2, \; \text{Vera $\forall c\geq 2$}
+\end{gather*}
+
 \vfill
 
 \bibliographystyle{Phil_Review} %%bib style found in bst folder, in bibtex folder, in texmf folder.
